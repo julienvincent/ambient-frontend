@@ -1,0 +1,25 @@
+{
+  "name": "ambient-frontend",
+  "version": "0.0.1",
+  "description": "A frontend environment",
+  "main": "core/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node core/server.js",
+    "build": "node core/build.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/julienvincent/ambient-frontend.git"
+  },
+  "keywords": [
+    "ambient",
+    "frontend"
+  ],
+  "author": "Julien Vincent",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/julienvincent/ambient-frontend/issues"
+  },
+  "homepage": "https://github.com/julienvincent/ambient-frontend#readme"
+}
