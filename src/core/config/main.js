@@ -1,4 +1,7 @@
-var path = require('path')
+var path = require('path'),
+    root = function(dir) {
+        return path.join(__dirname, '../../', dir)
+    }
 
 module.exports = {
 
@@ -8,13 +11,38 @@ module.exports = {
     "port": 3000,
 
     /**
+     * A namespace to be used within the app
+     */
+    "namespace": "app",
+
+    /**
      * File locations
      */
     "server": path.join(__dirname, 'webpack/index.js'),
-    "static": path.join(__dirname, '../../resources'),
-    "index": path.join(__dirname, '../../index.html'),
-    "entry": path.join(__dirname, '../../app'),
-    "output": path.join(__dirname, '../../build'),
+    "static": root('resources'),
+    "index": root('index.html'),
+    "root": root('app'),
+    "js": root('app/app.js'),
+    "scss": root('app/app.scss'),
+
+    /**
+     * HRM settings
+     */
+    "reload": true,
+    "noInfo": true,
+    "quiet": false,
+
+    /**
+     * Bundle settings
+     */
+
+    // Build directory
+    "output": root('build'),
+    // Output file name. Do not include extension name.
+    "fileName": "app",
+    // Files or directories to copy to build directory
+    "copy": [
+    ],
 
     /**
      * List of environment variables that get used by the server

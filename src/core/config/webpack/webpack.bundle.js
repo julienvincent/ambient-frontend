@@ -1,22 +1,20 @@
 var path = require('path');
 var webpack = require('webpack');
+var aliases = require('../aliases')
 
 module.exports = function (opts) {
     return {
         entry: [
-            './src/index'
+            opts.js
         ],
         output: {
-            path: path.join(__dirname, 'dist'),
-            filename: 'bundle.js',
-            publicPath: '/static/'
+            path: opts.output,
+            filename: `${opts.fileName}.js`
         },
         plugins: [
             new webpack.optimize.OccurenceOrderPlugin(),
             new webpack.DefinePlugin({
-                'process.env': {
-                    'NODE_ENV': JSON.stringify('production')
-                }
+                ENV: opts.variables
             }),
             new webpack.optimize.UglifyJsPlugin({
                 compressor: {
@@ -25,11 +23,16 @@ module.exports = function (opts) {
             })
         ],
         module: {
-            loaders: [{
-                test: /\.js$/,
-                loaders: ['babel'],
-                include: path.join(__dirname, 'src')
-            }]
+            loaders: [
+                {
+                    test: /\.js$/,
+                    loaders: ['babel']
+                }
+            ]
+        },
+
+        resolve: {
+            alias: aliases
         }
     }
 }
