@@ -29,6 +29,10 @@ if (args.bundle) {
     setEnv('production')
 }
 
+if (args.port) {
+    opts.port = args.port
+}
+
 opts.variables = _.mapValues(opts.variables, function (variable) {
     return process.env[variable.env] || variable.value
 })
@@ -41,7 +45,7 @@ if (opts.static) {
 module(server, opts)
 
 server.get('*', function (req, res) {
-    var production = opts.variables.ENV == 'production',
+    var production = opts.variables.ENVIRONMENT == 'production',
         index = production ? fs.readFileSync(`${opts.output}/index.html`, 'utf8') :
             fs.readFileSync(opts.index, 'utf8'),
         injector = cheerio.load(index)
@@ -51,13 +55,13 @@ server.get('*', function (req, res) {
 
     if (production) {
         var css = `<link rel="stylesheet" href="/${opts.fileName}.css">`
-        injector('head').append(css)
+        injector('head').append(`${css}\n`)
     } else {
         js = `<script src="${opts.js.substring(opts.js.lastIndexOf('/'))}"></script>`
     }
 
-    injector('head').append(js)
-    injector('body').append(variables)
+    injector('body').append(`${variables}\n`)
+    injector('body').append(`${js}\n`)
 
     res.send(injector.html())
 })

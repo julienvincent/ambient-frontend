@@ -13,9 +13,6 @@ module.exports = function (opts) {
         },
         plugins: [
             new webpack.optimize.OccurenceOrderPlugin(),
-            new webpack.DefinePlugin({
-                ENV: opts.variables
-            }),
             new webpack.optimize.UglifyJsPlugin({
                 compressor: {
                     warnings: false

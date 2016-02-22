@@ -1,9 +1,14 @@
 var config = require('./main'),
+    p = require('path'),
     namespace = function (path) {
-        return path ? `${config.namespace}/${path}` : config.namespace
+        return path ? p.join(config.namespace, path) : config.namespace
+    },
+    root = function(path) {
+        return path ? p.join(config.root, path) : config.root
     }
 
 module.exports = {
-    [namespace()]: config.root,
-    scss: config.scss
+    scss: config.scss,
+    [namespace('actions')]: root('state/actions'),
+    [namespace()]: root()
 }

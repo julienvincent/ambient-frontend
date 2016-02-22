@@ -1,0 +1,5 @@
+{
+  "command": "node",
+  "script": "core/server.js",
+  "root": "src"
+}

@@ -18,10 +18,7 @@ module.exports = function (opts) {
         },
         plugins: [
             new webpack.HotModuleReplacementPlugin(),
-            new webpack.NoErrorsPlugin(),
-            new webpack.DefinePlugin({
-                ENV: JSON.stringify(opts.variables)
-            }),
+            new webpack.NoErrorsPlugin()
         ],
         module: {
             loaders: [
