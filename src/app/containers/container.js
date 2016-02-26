@@ -1,15 +1,18 @@
 import { Component, createElement } from 'react'
+import { div, DevTools } from 'app/components'
 import { connect } from 'app/utils'
 
-@connect(state => ({state}))
+@connect()
 export default
 class Container extends Component {
     constructor() {
         super()
 
-        this.state = {
-            title: 'ok'
-        }
+        this.state = {}
+    }
+
+    componentWillMount() {
+        //this.props.actions.users.fetch()
     }
 
     componentWillReceiveProps(props) {
@@ -17,12 +20,13 @@ class Container extends Component {
     }
 
     render() {
-        console.log(this.props)
-        this.props.actions.users.fetch(['user'])
+        //console.log(this.props.actions)
         const { title } = this.state
 
         return (
-            createElement('div', {onClick: () => this.setState({title: 'lol'}), className: 'awesome'}, title)
+            div({},
+                'works'
+            )
         )
     }
 }

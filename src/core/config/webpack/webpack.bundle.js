@@ -5,6 +5,7 @@ var aliases = require('../aliases')
 module.exports = function (opts) {
     return {
         entry: [
+            'babel-polyfill',
             opts.js
         ],
         output: {
@@ -13,6 +14,11 @@ module.exports = function (opts) {
         },
         plugins: [
             new webpack.optimize.OccurenceOrderPlugin(),
+            new webpack.DefinePlugin({
+                'process.env': {
+                    'NODE_ENV': JSON.stringify('production')
+                }
+            }),
             new webpack.optimize.UglifyJsPlugin({
                 compressor: {
                     warnings: false
@@ -23,7 +29,8 @@ module.exports = function (opts) {
             loaders: [
                 {
                     test: /\.js$/,
-                    loaders: ['babel']
+                    loaders: ['babel'],
+                    excluse: /node_modules/
                 }
             ]
         },

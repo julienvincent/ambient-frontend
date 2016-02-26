@@ -4,6 +4,7 @@ import { createFactory as fact, createElement as el, cloneElement } from 'react'
  * Components
  */
 
+export * from './DevTools'
 
 /**
  * HTML pieces

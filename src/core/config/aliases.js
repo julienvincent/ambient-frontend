@@ -10,5 +10,7 @@ var config = require('./main'),
 module.exports = {
     scss: config.scss,
     [namespace('actions')]: root('state/actions'),
+    [namespace('model')]: root('state/model'),
+    [namespace('selectors')]: root('state/utils/selectors'),
     [namespace()]: root()
 }

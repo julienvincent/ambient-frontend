@@ -9,6 +9,7 @@ module.exports = function (opts) {
         entry: [
             'eventsource-polyfill',
             `webpack-hot-middleware/client?noInfo=${opts.noInfo}&reload=${opts.reload}$quiet=${opts.quiet}`,
+            'babel-polyfill',
             opts.js
         ],
         output: {
@@ -24,7 +25,8 @@ module.exports = function (opts) {
             loaders: [
                 {
                     test: /\.js$/,
-                    loaders: ['babel']
+                    loaders: ['babel'],
+                    exclude: /node_modules/
                 },
                 {
                     test: /\.scss$/,

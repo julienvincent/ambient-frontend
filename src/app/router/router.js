@@ -6,7 +6,7 @@ import Container from 'app/containers/container'
 let route = fact(Route),
     index = fact(IndexRoute);
 
-const router = el(Router, {history: ENV.ENVIRONMENT == 'production' ? browserHistory : hashHistory},
+const router = el(Router, {history: env.ENVIRONMENT == 'production' ? browserHistory : hashHistory},
 
     route({path: '/', component: Container})
 )

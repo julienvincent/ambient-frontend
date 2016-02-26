@@ -58,6 +58,8 @@ module.exports = {
         // Hostname belonging to the API
         "API_HOST": {env: "API_HOST", value: 'docker.local'},
         // Port belonging to the API
-        "API_PORT": {env: "API_PORT", value: '8080'}
+        "API_PORT": {env: "API_PORT", value: '8080'},
+        // Pre-populate the state from mocks
+        "PRE_POPULATE_STATE": {env: "PRE_POPULATE_STATE", value: false}
     }
 }

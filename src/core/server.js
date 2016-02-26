@@ -51,7 +51,7 @@ server.get('*', function (req, res) {
         injector = cheerio.load(index)
 
     var js = `<script src="/${opts.fileName}.js"></script>`,
-        variables = `<script>window.ENV = ${JSON.stringify(opts.variables)}</script>`
+        variables = `<script>window.env = ${JSON.stringify(opts.variables)}</script>`
 
     if (production) {
         var css = `<link rel="stylesheet" href="/${opts.fileName}.css">`

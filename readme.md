@@ -8,6 +8,10 @@
 + cluster deployment
 + Small app proxy deployment
 
+# Final goal
+
+Extract everything as a set of utils so as to remove opinionated architecture and rather write opinionated, recommended usage docs
+
 # server
 
 All server components and config is located at `src/core`. There are two main config points:
