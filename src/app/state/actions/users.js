@@ -1,5 +1,4 @@
-import { take, put, call, fork } from 'redux-saga/effects'
-import { takeEvery } from 'redux-saga'
+import { take, call, fork } from 'redux-saga/effects'
 import { API } from '../utils/api'
 import { setEntities } from './common'
 
@@ -32,13 +31,13 @@ const fetch = users => ({
 const STORE_USER = 'STORE_USER'
 const store = user => ({
     type: STORE_USER,
-    payload: users
+    payload: user
 })
 
 const UPDATE_USER = 'UPDATE_USER'
 const update = user => ({
     type: UPDATE_USER,
-    payload: users
+    payload: user
 })
 
 const users = {
@@ -51,14 +50,15 @@ const users = {
  * User sagas
  */
 
-function* watchFetchUsers(users) {
+function* watchFetchUsers() {
     while (true) {
         const action = yield take(FETCH_USERS)
         const response = yield call(
             API,
             {
                 users: {
-                    model: 'user'
+                    model: 'user',
+                    take: action.payload
                 }
             }
         )

@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-fetch'
-import { definitions, mock, buildRequest } from 'app/model'
+import { buildRequest } from 'app/model'
 import { setEntities } from 'app/actions/common'
 
 const Fetch = (req, opts) => fetch(`http://${env.API_HOST}:${env.API_PORT}${req.startsWith('/') ? '' : '/'}${req}`, {
@@ -8,7 +8,7 @@ const Fetch = (req, opts) => fetch(`http://${env.API_HOST}:${env.API_PORT}${req.
             ...{
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + env.TOKEN
+                'Authorization': `Bearer ${env.TOKEN}`
             },
             ...opts.headers || {}
         }

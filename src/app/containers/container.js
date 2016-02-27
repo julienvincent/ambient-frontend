@@ -1,32 +1,22 @@
-import { Component, createElement } from 'react'
-import { div, DevTools } from 'app/components'
+import { Component } from 'react'
+import { div } from 'app/components'
 import { connect } from 'app/utils'
 
-@connect(state => ({users: state.entities.users}))
+@connect()
 export default
 class Container extends Component {
-    constructor() {
-        super()
-
-        this.state = {}
-    }
 
     componentWillMount() {
-        this.props.actions.users.fetch()
+
     }
 
-    componentWillReceiveProps(props) {
+    componentWillReceiveProps() {
         this.forceUpdate()
     }
 
     render() {
-        console.log(this.props.users)
-        const { title } = this.state
-
         return (
-            div({},
-                'works'
-            )
+            div({}, "Ambient")
         )
     }
 }
