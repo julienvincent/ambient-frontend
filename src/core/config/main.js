@@ -60,6 +60,10 @@ module.exports = {
         // Port belonging to the API
         "API_PORT": {env: "API_PORT", value: '8080'},
         // Pre-populate the state from mocks
-        "PRE_POPULATE_STATE": {env: "PRE_POPULATE_STATE", value: false}
+        "PRE_POPULATE_STATE": {env: "PRE_POPULATE_STATE", value: false},
+        // Use mocks instead of real requests
+        "MOCK": {env: "MOCK", value: true},
+        // Set a delay (in ms) for each mocked request
+        "MOCK_DELAY": {env: "MOCK_DELAY", value: 0}
     }
 }

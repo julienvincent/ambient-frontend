@@ -5,7 +5,7 @@ var prefix = require('autoprefixer')
 
 module.exports = function (opts) {
     return {
-        devtool: 'cheap-module-eval-source-map',
+        devtool: 'cheap-module-source-map',
         entry: [
             'eventsource-polyfill',
             `webpack-hot-middleware/client?noInfo=${opts.noInfo}&reload=${opts.reload}$quiet=${opts.quiet}`,

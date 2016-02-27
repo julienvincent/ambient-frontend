@@ -1,5 +1,6 @@
-import { take, takeEvery, put, call, fork } from 'redux-saga/effects'
-import { graphAPI as API } from '../utils/api'
+import { take, put, call, fork } from 'redux-saga/effects'
+import { takeEvery } from 'redux-saga'
+import { API } from '../utils/api'
 import { setEntities } from './common'
 
 /**
@@ -51,15 +52,24 @@ const users = {
  */
 
 function* watchFetchUsers(users) {
-    const request = action => API('request').then(response => setEntities(response.normalized))
-
-    yield* takeEvery(FETCH_USERS, request)
+    while (true) {
+        const action = yield take(FETCH_USERS)
+        const response = yield call(
+            API,
+            {
+                users: {
+                    model: 'user'
+                }
+            }
+        )
+        yield call(setEntities, response.normalized.entities)
+    }
 }
 
 function* saga() {
-    while (true) {
-        const action = yield take(FETCH_USERS)
-    }
+    yield [
+        fork(watchFetchUsers)
+    ]
 }
 
 export { saga as default, users }

@@ -15,7 +15,7 @@ const book = {
     type: 'object',
     schemaAttribute: 'books',
     definition: {
-        user: 'user'
+        author: 'user'
     },
     properties: {
         author: {type: 'string'}

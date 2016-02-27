@@ -16,8 +16,8 @@ const devStore = () => {
     )
 
     if (module.hot) {
-        module.hot.accept('./reducers/index', () => {
-            const nextRootReducer = require('./reducers/index').default
+        module.hot.accept('./reducers', () => {
+            const nextRootReducer = require('./reducers/index')
             store.replaceReducer(nextRootReducer)
         })
     }
@@ -26,6 +26,6 @@ const devStore = () => {
 }
 const prodStore = () => createStore(reducers, initialState, middleware)
 
-const store = env.ENVIRONMENT == 'development' ? devStore() : prodStore()
+const store = env.ENVIRONMENT == 'production' ? prodStore() : devStore()
 
 export { store as default }

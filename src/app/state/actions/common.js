@@ -1,15 +1,26 @@
+import _ from 'lodash'
 import * as actions from 'app/actions'
+import * as schemas from '../model/schemas'
+import { put, call } from 'redux-saga/effects'
 
-const setEntities = entities => {
-    if (entities.users) {
-        actions.setUsers(users)
+function* callMethods(entities, method) {
+    for (let key in schemas) {
+        const attr = schemas[key].schemaAttribute
+        if (entities[attr]) {
+            const action = actions[_.camelCase(`${method} ${attr}`)]
+            if (typeof action === 'function') {
+                yield put(action(entities[attr]))
+            }
+        }
     }
 }
 
-const clearEntities = entities => {
-    if (entities.users) {
-        actions.clearUsers(users)
-    }
+function* setEntities(entities) {
+    yield* callMethods(entities, 'set')
+}
+
+function* clearEntities(entities) {
+    yield* callMethods(entities, 'clear')
 }
 
 export {

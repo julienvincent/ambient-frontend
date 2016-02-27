@@ -140,3 +140,33 @@ class MyComponent extends Component {
 	}
 }
 ```
+
+// request examples
+    //{
+    //    users: {
+    //        model: 'user',
+    //        type: 'query',
+    //        params: {
+    //            ids: [1, 2]
+    //        },
+    //        properties: [
+    //            'firstname',
+    //            'lastname'
+    //        ],
+    //        books: {
+    //            model: 'book'
+    //        }
+    //    }
+    //}
+    //
+    //{
+    //    users: {
+    //        model: 'user',
+    //        type: 'mutation',
+    //        setOn: 1,
+    //        properties: {
+    //            firstname: 'john',
+    //            lastname: 'doe'
+    //        }
+    //    }
+    //}

@@ -2,7 +2,7 @@ import { Component, createElement } from 'react'
 import { div, DevTools } from 'app/components'
 import { connect } from 'app/utils'
 
-@connect()
+@connect(state => ({users: state.entities.users}))
 export default
 class Container extends Component {
     constructor() {
@@ -12,7 +12,7 @@ class Container extends Component {
     }
 
     componentWillMount() {
-        //this.props.actions.users.fetch()
+        this.props.actions.users.fetch()
     }
 
     componentWillReceiveProps(props) {
@@ -20,7 +20,7 @@ class Container extends Component {
     }
 
     render() {
-        //console.log(this.props.actions)
+        console.log(this.props.users)
         const { title } = this.state
 
         return (

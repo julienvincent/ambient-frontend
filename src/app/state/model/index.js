@@ -1,4 +1,4 @@
-import { Schema, arrayOf } from 'normalizr'
+import { Schema, normalize, arrayOf } from 'normalizr'
 import jsf from 'json-schema-faker'
 import _ from 'lodash'
 import * as schemas from './schemas'
@@ -43,7 +43,50 @@ _.forIn(schemas, (schema, key) => {
     )
 })
 
-const mock = (entity, repeat = 1) => {
+const buildRequest = query => ({
+    getQuery: () => {
+        let builtQuery = ``
+
+        _.forIn(query, (entity, key) => {
+            const makeParams = params => {
+                const getType = param => {
+                    if (Array.isArray(param)) {
+                        return `[${param}]`
+                    } else {
+                        return `"${param}"`
+                    }
+                }
+
+                return _.map(params, (param, key) => `${key}: ${getType(param)}`)
+            }
+
+            const makeQuery = (entity, key) => {
+                const entities = _.omit(entity, ['model', 'type', 'params', 'properties'])
+
+                return `${key}(${makeParams(entity.params)}) { ` +
+                    `${entity.properties || []}${_.isEmpty(entities) ? '' : ', '}${_.map(entities, makeQuery)} }`
+            }
+
+            if (entity.type == 'mutation') {
+                builtQuery += `mutation ${key} { ${key}(${makeParams(entity.properties)}) }`
+            } else {
+                builtQuery += `{ ${makeQuery(entity, key)} }`
+            }
+        })
+
+        return builtQuery
+    },
+
+    mock: () => ({
+        entities: {
+            ..._.mapValues(query, entity => mock(entity.model))
+        }
+    }),
+
+    normalize: response => normalize(response, _.mapValues(query, entity => arrayOf(definitions[entity.model])))
+})
+
+const mock = (entity, repeat = 20) => {
     const range = _.range(1, repeat + 1)
     if (typeof entity === 'string') {
         return definitions[entity].mock(range)
@@ -66,5 +109,6 @@ export {
     initialState,
     definitions,
     mock,
-    mockAll
+    mockAll,
+    buildRequest
 }
