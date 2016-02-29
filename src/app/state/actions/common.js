@@ -1,11 +1,12 @@
 import _ from 'lodash'
 import * as actions from 'app/actions'
-import * as schemas from '../model/schemas'
+import { models } from '../model/index'
 import { put } from 'redux-saga/effects'
+import store from '../store'
 
-function* callMethods(entities, method) {
-    for (const key in schemas) {
-        const attr = schemas[key].schemaAttribute
+function* generateMethods(entities, method) {
+    for (const key in models) {
+        const attr = models[key].getKey()
         if (entities[attr]) {
             const action = actions[_.camelCase(`${method} ${attr}`)]
             if (typeof action === 'function') {
@@ -15,15 +16,30 @@ function* callMethods(entities, method) {
     }
 }
 
-function* setEntities(entities) {
-    yield* callMethods(entities, 'set')
+const callMethods = (entities, method) =>_.forEach(models, model => {
+    const attr = model.getKey()
+    if (entities[attr]) {
+        const action = actions[_.camelCase(`${method} ${attr}`)]
+        if (typeof action === 'function') {
+            store.dispatch(action(entities[attr]))
+        }
+    }
+})
+
+function* generateSetEntities(entities) {
+    yield* generateMethods(entities, 'set')
 }
 
-function* clearEntities(entities) {
-    yield* callMethods(entities, 'clear')
+function* generateClearEntities(entities) {
+    yield* generateMethods(entities, 'clear')
 }
+
+const setEntities = entities => callMethods(entities, 'set')
+const clearEntities = entities => callMethods(entities, 'clear')
 
 export {
+    generateSetEntities,
+    generateClearEntities,
     setEntities,
     clearEntities
 }

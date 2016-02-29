@@ -7,7 +7,7 @@ export default
 class Container extends Component {
 
     componentWillMount() {
-
+        this.props.actions.users.fetch()
     }
 
     componentWillReceiveProps() {

@@ -7,6 +7,8 @@ export const users = (state = {}, action) => {
             return setEntities(state, action.users)
         case CLEAR_USERS:
             return clearEntities(state, action.users)
+        case CLEAR_USERS + 'l':
+            return clearEntities(state, action.users)
         default:
             return state
     }

@@ -18,46 +18,38 @@ const Fetch = (req, opts) => fetch(`http://${env.API_HOST}:${env.API_PORT}${req.
 const API = (request, auto, mockError) => {
     const util = buildRequest(request)
 
-    if (env.MOCK) {
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                if (mockError) {
-                    reject(new Error('Mocked error'))
-                } else {
-                    resolve({
-                        json: () => util.mock()
-                    })
-                }
-            }, env.MOCK_DELAY || 0)
-        }).then(response => {
-            if (auto) {
-                setEntities(response.json())
-            }
-
-            return {
-                response: {
-                    status: 200
-                },
-                json: {},
-                normalized: response.json()
-            }
-        })
-    } else {
-        return Fetch('/graphql', {
-            method: 'POST',
-            body: JSON.stringify({query: util.getQuery()})
-        }).then(response => ({
-            response,
-            json: response.json(),
-            normalized: util.normalize(response.json())
-        })).then(response => {
-            if (auto) {
-                setEntities(response.normalized.entites)
-            }
-
-            return response
-        })
+    const getRequest = () => {
+        if (env.MOCK) {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    if (mockError) {
+                        reject(new Error('Mocked error'))
+                    } else {
+                        resolve({
+                            json: () => util.mock()
+                        })
+                    }
+                }, env.MOCK_DELAY || 0)
+            })
+        } else {
+            return Fetch('/graphql', {
+                method: 'POST',
+                body: JSON.stringify({query: util.getQuery()})
+            })
+        }
     }
+
+    return getRequest().then(response => ({
+        response,
+        json: response.json(),
+        normalized: util.normalize(response.json())
+    })).then(response => {
+        if (auto) {
+            setEntities(response.normalized.entites)
+        }
+
+        return response
+    })
 }
 
 export {

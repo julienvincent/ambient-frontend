@@ -13,7 +13,8 @@ const enhancer = createDevTools(
             changePositionKey: "ctrl-h",
             changeMonitorKey: 'ctrl-m',
             defaultIsVisible: true,
-            defaultPosition: 'bottom'
+            defaultPosition: 'bottom',
+            defaultSize: 0.6
         },
 
         createElement(MultipleMonitors, {},

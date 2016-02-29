@@ -1,6 +1,6 @@
 import { render } from 'react-dom'
 import { createElement, Component } from 'react'
-import { DevTools, div } from 'app/components'
+import { DevTools, div, el } from 'app/components'
 import { Provider } from 'react-redux'
 import router from './router/router'
 import store from './state/store'
@@ -12,13 +12,13 @@ class Root extends Component {
     render() {
         return (
             div({},
-                createElement(Provider, {store: store}, router),
-                env.ENVIRONMENT === 'development' ? DevTools({store: store}) : null
+                router,
+                env.ENVIRONMENT === 'development' ? DevTools({}) : null
             )
         )
     }
 }
 
 window.onload = () => {
-    render(createElement(Root), document.getElementById('root'))
+    render(el(Provider, {store: store}, el(Root)), document.getElementById('root'))
 }

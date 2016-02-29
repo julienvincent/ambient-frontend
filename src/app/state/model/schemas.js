@@ -5,7 +5,7 @@ const user = {
         books: ['book']
     },
     properties: {
-        firstname: {type: 'string'},
+        firstname: {type: 'string', faker: 'name.firstName'},
         lastname: {type: 'string'}
     },
     required: ['firstname', 'lastname']
@@ -15,10 +15,10 @@ const book = {
     type: 'object',
     schemaAttribute: 'books',
     definition: {
-        author: 'user'
+
     },
     properties: {
-        author: {type: 'string'}
+        author: {type: 'string', faker: 'random.number'}
     },
     required: ['author']
 }

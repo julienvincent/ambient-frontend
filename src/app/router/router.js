@@ -8,8 +8,7 @@ const route = fact(Route),
 
 const router = el(Router, {history: env.ENVIRONMENT == 'production' ? browserHistory : hashHistory},
 
-    route({path: '/', component: Container},
-        index()
+    route({path: '/', component: Container}
     )
 )
 

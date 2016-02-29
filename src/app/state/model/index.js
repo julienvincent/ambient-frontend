@@ -11,28 +11,28 @@ Schema.prototype.mockable = function (schema) {
 Schema.prototype.mock = function (ids) {
     if (!ids) return jsf(this.schema)
     if (typeof ids === 'number') return _.set(jsf(this.schema), 'id', ids)
-    if (Array.isArray(ids)) return _.keyBy(ids.map(id => _.set(jsf(this.schema), 'id', id)), entity => entity.id)
+    if (Array.isArray(ids)) return _.map(ids, id => _.set(jsf(this.schema), 'id', id))
 }
 
-const definitions = {}
+const models = {}
 _.forIn(schemas, (schema, key) => {
-    if (!definitions[key]) {
-        definitions[key] = new Schema(schema.schemaAttribute || key)
+    if (!models[key]) {
+        models[key] = new Schema(schema.schemaAttribute || key)
     }
 
-    definitions[key].mockable(schema)
-    definitions[key].define(_.mapValues(schema.definition, definition => {
+    models[key].mockable(schema)
+    models[key].define(_.mapValues(schema.definition, definition => {
             const getOrCreate = definition => {
-                if (!definitions[definition]) {
+                if (!models[definition]) {
                     const schema = _.find(schemas, (schema, key) => key == definition)
                     if (schema) {
-                        definitions[definition] = new Schema(schema.schemaAttribute || key)
+                        models[definition] = new Schema(schema.schemaAttribute || key)
                     } else {
                         throw new Error(`The schema definition ${definition} doesn't exist`)
                     }
                 }
 
-                return definitions[definition]
+                return models[definition]
             }
 
             if (Array.isArray(definition)) {
@@ -77,37 +77,77 @@ const buildRequest = query => ({
         return builtQuery
     },
 
-    mock: () => ({
-        entities: {
-            ..._.mapValues(query, entity => mock(entity.model))
-        }
-    }),
+    mock: () => {
+        const mockNestedRequest = (entity, id) => {
+            const models = _.pickBy(entity, child => child && child.model)
 
-    normalize: response => normalize(response, _.mapValues(query, entity => arrayOf(definitions[entity.model])))
+            const getNewId = length => (id && typeof id === 'number' ? (id * length - length) : 0)
+
+            if (entity.params) {
+                const requestedIds = entity.params.id || entity.params.ids
+                if (requestedIds) {
+                    if (Array.isArray(requestedIds)) {
+                        id = _.map(requestedIds, requestedId => requestedId + getNewId(requestedIds.length))
+                    } else {
+                        id = requestedIds + (id || 0)
+                    }
+                } else {
+                    id = undefined
+                }
+            } else {
+                id = _.map(_.range(1, 21), requestedId => requestedId + getNewId(20))
+            }
+
+            const mockedEntity = mock(entity.model, id)
+
+            if (Array.isArray(mockedEntity)) {
+                return _.map(mockedEntity, entity => ({
+                    ...entity,
+                    ..._.mapValues(models, model => mockNestedRequest(model, entity.id))
+                }))
+            } else {
+                return {
+                    ...mockedEntity,
+                    ..._.mapValues(models, model => mockNestedRequest(model, mockedEntity.id))
+                }
+            }
+        }
+
+        return {
+            ..._.mapValues(query, mockNestedRequest)
+        }
+    },
+
+    normalize: response => normalize(response, _.mapValues(query, (entity, key) => {
+        if (Array.isArray(response[key])) {
+            return arrayOf(models[entity.model])
+        } else {
+            return models[entity.model]
+        }
+    }))
 })
 
-const mock = (entity, repeat = 20) => {
-    const range = _.range(1, repeat + 1)
+const mock = (entity, ids = _.range(1, 21)) => {
     if (typeof entity === 'string') {
-        return definitions[entity].mock(range)
+        return models[entity].mock(ids)
     } else {
-        return entity.mock(range)
+        return entity.mock(ids)
     }
 }
 
-const mockAll = (initialState, repeat) => ({
+const mockAll = (initialState, ids) => ({
     ...initialState.entities,
-    ..._.mapValues(_.mapKeys(definitions, definition => definition.getKey()), entity => mock(entity, repeat))
+    ..._.mapValues(_.mapKeys(models, definition => definition.getKey()), entity => mock(entity, ids))
 })
 
 if (env.PRE_POPULATE_STATE) {
-    initialState.entities = mockAll(initialState, 20)
+    initialState.entities = mockAll(initialState, _.range(0, 21))
 }
 
 export {
     initialState as default,
     initialState,
-    definitions,
+    models,
     mock,
     mockAll,
     buildRequest
