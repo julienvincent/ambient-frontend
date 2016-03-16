@@ -11,7 +11,8 @@ module.exports = {
     "port": 3000,
 
     /**
-     * A namespace to be used within the app
+     * A namespace to be used within the app.
+     * If you change this you will need to clean up all pre-written code to use the new namespace.
      */
     "namespace": "app",
 

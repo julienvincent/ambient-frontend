@@ -1,17 +1,21 @@
 import { SET_USERS, CLEAR_USERS } from 'app/actions/users'
-import { setEntities, clearEntities } from './common'
+import _ from 'lodash'
 
-export const users = (state = {}, action) => {
+const users = (state = {}, action) => {
     switch (action.type) {
         case SET_USERS:
-            return setEntities(state, action.users)
+            return {
+                ...state,
+                ...action.users
+            }
         case CLEAR_USERS:
-            return clearEntities(state, action.users)
-        case CLEAR_USERS + 'l':
-            return clearEntities(state, action.users)
+            return {
+                ...state,
+                ..._.without(state, entities)
+            }
         default:
             return state
     }
 }
 
-export { users as default }
+export { users as default, users }

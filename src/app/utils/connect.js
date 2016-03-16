@@ -1,14 +1,19 @@
 import { connect as base } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import * as selectors from 'app/selectors'
+import { routerActions } from 'react-router-redux'
 import _ from 'lodash'
-
+import * as selectors from 'app/selectors'
 import * as actions from 'app/actions'
 
-export const connect = (mapStateToProps, mapDispatchToProps, mergeProps, options) => {
+const connect = (mapStateToProps, mapDispatchToProps, mergeProps, options) => {
 
     const newMapDispatchToProps = dispatch => ({
-        actions: _.mapValues(_.pickBy(actions,
+        actions: _.mapValues(_.pickBy({
+                ...actions,
+                ...{
+                    router: routerActions
+                }
+            },
             (value, key) => typeof value === 'object' && key !== 'default'),
             group => bindActionCreators(group, dispatch))
     })
@@ -27,4 +32,4 @@ export const connect = (mapStateToProps, mapDispatchToProps, mergeProps, options
     return base(mapStateToProps, mapDispatchToProps, mergeProps, options)
 }
 
-export { connect as default }
+export { connect as default, connect }

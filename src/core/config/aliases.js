@@ -11,6 +11,7 @@ module.exports = {
     scss: config.scss,
     [namespace('actions')]: root('state/actions'),
     [namespace('model')]: root('state/model'),
+    [namespace('store')]: root('state/store.js'),
     [namespace('selectors')]: root('state/utils/selectors'),
     [namespace()]: root()
 }

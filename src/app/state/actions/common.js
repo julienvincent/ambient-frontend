@@ -1,22 +1,9 @@
-import _ from 'lodash'
 import * as actions from 'app/actions'
-import { models } from '../model/index'
-import { put } from 'redux-saga/effects'
-import store from '../store'
+import * as models from 'app/model/schemas'
+import store from 'app/store'
+import _ from 'lodash'
 
-function* generateMethods(entities, method) {
-    for (const key in models) {
-        const attr = models[key].getKey()
-        if (entities[attr]) {
-            const action = actions[_.camelCase(`${method} ${attr}`)]
-            if (typeof action === 'function') {
-                yield put(action(entities[attr]))
-            }
-        }
-    }
-}
-
-const callMethods = (entities, method) =>_.forEach(models, model => {
+const callMethods = (entities, method) => _.forEach(models, model => {
     const attr = model.getKey()
     if (entities[attr]) {
         const action = actions[_.camelCase(`${method} ${attr}`)]
@@ -26,20 +13,17 @@ const callMethods = (entities, method) =>_.forEach(models, model => {
     }
 })
 
-function* generateSetEntities(entities) {
-    yield* generateMethods(entities, 'set')
-}
-
-function* generateClearEntities(entities) {
-    yield* generateMethods(entities, 'clear')
-}
-
 const setEntities = entities => callMethods(entities, 'set')
 const clearEntities = entities => callMethods(entities, 'clear')
 
-export {
-    generateSetEntities,
-    generateClearEntities,
-    setEntities,
-    clearEntities
+export const SET_REQUEST = "SET_REQUEST"
+const setRequest = (request, status) => {
+    status = status === undefined ? 1 : status
+    store.dispatch({
+        type: SET_REQUEST,
+        request,
+        status
+    })
 }
+
+export { setEntities, clearEntities, setRequest }

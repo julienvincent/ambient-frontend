@@ -2,12 +2,11 @@ import { Component } from 'react'
 import { div } from 'app/components'
 import { connect } from 'app/utils'
 
-@connect()
+@connect(state => ({state}))
 export default
 class Container extends Component {
 
     componentWillMount() {
-        this.props.actions.users.fetch()
     }
 
     componentWillReceiveProps() {
@@ -16,7 +15,7 @@ class Container extends Component {
 
     render() {
         return (
-            div({}, "Ambient")
+            div({onClick: () => this.props.actions.users.fetch()}, 'ambient')
         )
     }
 }

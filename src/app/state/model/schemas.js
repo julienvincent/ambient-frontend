@@ -1,29 +1,21 @@
-const user = {
-    type: 'object',
-    schemaAttribute: 'users',
-    definition: {
-        books: ['book']
-    },
-    properties: {
-        firstname: {type: 'string', faker: 'name.firstName'},
-        lastname: {type: 'string'}
-    },
-    required: ['firstname', 'lastname']
-}
+import { schema } from 'modelizr'
 
-const book = {
-    type: 'object',
-    schemaAttribute: 'books',
-    definition: {
+const user = schema('users', {
+    firstName: {type: 'string', faker: 'name.firstName'},
+    lastName: {type: 'string', faker: 'name.lastName'},
+    age: {type: 'integer', faker: 'random.number'}
+})
+const book = schema('books', {
+    title: {type: 'string', faker: 'name.firstName'},
+    publisher: {type: 'string'}
+})
 
-    },
-    properties: {
-        author: {type: 'string', faker: 'random.number'}
-    },
-    required: ['author']
-}
+//user.define({
+//    books: [book],
+//    bestSeller: book
+//})
+book.define({
+    author: user
+})
 
-export {
-    user,
-    book
-}
+export { user, book }

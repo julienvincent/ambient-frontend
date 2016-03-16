@@ -12,7 +12,7 @@ const enhancer = createDevTools(
             toggleVisibilityKey: "ctrl-w",
             changePositionKey: "ctrl-h",
             changeMonitorKey: 'ctrl-m',
-            defaultIsVisible: true,
+            defaultIsVisible: false,
             defaultPosition: 'bottom',
             defaultSize: 0.6
         },

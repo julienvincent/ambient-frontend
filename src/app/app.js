@@ -1,9 +1,9 @@
 import { render } from 'react-dom'
-import { createElement, Component } from 'react'
+import { Component } from 'react'
 import { DevTools, div, el } from 'app/components'
 import { Provider } from 'react-redux'
 import router from './router/router'
-import store from './state/store'
+import store from 'app/store'
 if (env.ENVIRONMENT == 'development') {
     require('./app.scss')
 }

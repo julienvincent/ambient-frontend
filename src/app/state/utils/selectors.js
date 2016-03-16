@@ -1,4 +1,4 @@
-import store from '../store'
+import store from 'app/store'
 import _ from 'lodash'
 
 const get = query => _.get(store.getState(), query)

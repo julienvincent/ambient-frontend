@@ -1,5 +1,6 @@
-import { API } from '../utils/api'
-import { setEntities } from './common'
+import { query, mutation } from '../utils/api'
+import { book, user } from 'app/model/schemas'
+import { setEntities, setRequest } from './common'
 
 /**
  * State manipulators
@@ -20,31 +21,28 @@ export const clearUsers = users => ({
 /**
  * Methods parsed in as props
  */
+const fetch = users => () => {
+    setRequest('users.fetch')
 
-const fetch = users => dispatch => {
-    API({
-        users: {
-            model: 'user',
-            params: {
-                ids: users
-            },
-            books: {
-                model: 'book',
-                params: {
-                    ids: [1, 2, 3, 4]
-                }
-            }
-        }
-    }).then(response => setEntities(response.normalized.entities))
-        .catch(err => console.log(err))
+    query(
+        user(
+            book()
+        ).params({id: users})
+    ).mock().debug()
+        .normalize(res => setEntities(res.entities))
+        .then(() => setRequest('users.fetch', 0))
+        .catch()
 }
 
-const store = user => dispatch => {
-
+const store = newUser => () => {
+    mutation(
+        user({...newUser}).as('setUser')
+    ).catch()
 }
-
-const update = user => dispatch => {
-
+const update = id => () => {
+    mutation(
+        user({id}).as('updateUser')
+    ).catch()
 }
 
 const users = {

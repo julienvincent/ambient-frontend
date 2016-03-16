@@ -1,15 +1,13 @@
-import { Router, Route, IndexRoute, browserHistory, hashHistory } from 'react-router'
-import { el, fact } from 'app/components'
+import { Router } from 'react-router'
+import { syncHistoryWithStore } from 'react-router-redux'
+import History from 'app/router/history'
+import store from 'app/store'
+import routes from 'app/router/routes'
+import { el } from 'app/components'
 
-import Container from 'app/containers/container'
+const history = syncHistoryWithStore(History, store, {
+    selectLocationState: state => state.router
+})
+const router = el(Router, {history: history}, ...routes)
 
-const route = fact(Route),
-    index = fact(IndexRoute)
-
-const router = el(Router, {history: env.ENVIRONMENT == 'production' ? browserHistory : hashHistory},
-
-    route({path: '/', component: Container}
-    )
-)
-
-export default router;
+export { router as default }

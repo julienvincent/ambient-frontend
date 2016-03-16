@@ -16,7 +16,8 @@ module.exports = function (opts) {
             new webpack.optimize.OccurenceOrderPlugin(),
             new webpack.DefinePlugin({
                 'process.env': {
-                    'NODE_ENV': JSON.stringify('production')
+                    'NODE_ENV': JSON.stringify('production'),
+                    'MODELIZR_CHEAP_MOCK': JSON.stringify(!opts.variables.MOCK)
                 }
             }),
             new webpack.optimize.UglifyJsPlugin({
@@ -30,7 +31,7 @@ module.exports = function (opts) {
                 {
                     test: /\.js$/,
                     loaders: ['babel'],
-                    excluse: /node_modules/
+                    exclude: /node_modules/
                 }
             ]
         },
